@@ -7,18 +7,17 @@
 mediawiki:
   image: wikimedia/mediawiki
   ports:
-    - "80:80"
-  dns: [172.17.42.1]
+    - "8000:80"
   links:
     - mysql
     - node-services
     - dnsdock
   volumes:
-    - /var/lib/mediawiki-containers/mediawiki:/data:rw
+    - ./mediawiki-containers/mediawiki:/data:rw
     # Inject our specific settings
     - ./conf/mediawiki:/conf:ro
   environment:
-    - MEDIAWIKI_SITE_SERVER=//localhost
+    - MEDIAWIKI_SITE_SERVER=//mysql
     - MEDIAWIKI_SITE_NAME=MediaWiki
     - MEDIAWIKI_SITE_LANG=en
     - MEDIAWIKI_ADMIN_USER=admin
@@ -33,21 +32,19 @@ mediawiki:
 
 node-services:
   image: wikimedia/mediawiki-node-services
-  dns: [172.17.42.1]
   # Temporarily expose RB port directly.
   # TODO: Set up rewrite at /api/rest_v1/.
   ports:
     - "7231:7231"
   volumes:
-    - /var/lib/mediawiki-containers/node-services:/data
+    - ./node-services:/data
   environment:
     - MEDIAWIKI_API_URL=http://mediawiki.docker/api.php
 
 mysql:
   image: mysql
-  dns: [172.17.42.1]
   volumes:
-    - /var/lib/mediawiki-containers/mysql:/var/lib/mysql:rw
+    - ./mysql:/var/lib/mysql:rw
   environment:
     - MYSQL_ROOT_PASSWORD=password
 
@@ -59,4 +56,4 @@ dnsdock:
   volumes:
     - /var/run/docker.sock:/run/docker.sock
   ports:
-    - 172.17.42.1:53:53/udp
+    - 53:53/udp

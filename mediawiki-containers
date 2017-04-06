@@ -7,7 +7,7 @@ set -e
 # Minimal installation on Debian 8.0 Jessie, Ubuntu 15.04+ or newer:
 # curl https://raw.githubusercontent.com/wikimedia/mediawiki-containers/master/mediawiki-containers | sudo bash
 
-BASEDIR=/srv/mediawiki-containers
+BASEDIR=/Users/nattawut/Apache/git/mediawiki-containers
 DATADIR="$BASEDIR/data"
 
 if [ -d $DATADIR -a -f $DATADIR/config ]; then
